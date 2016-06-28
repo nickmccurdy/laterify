@@ -1,22 +1,44 @@
-import { Template } from 'meteor/templating';
-import { ReactiveVar } from 'meteor/reactive-var';
+import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import { render } from 'react-dom';
+ 
+function Item(props) {
+  return <li>{props.data.name}</li>
+}
 
-import './main.html';
+function ItemList(props) {
+  return (
+    <div>
+      <h2>{props.type}</h2>
+      <ul>{props.items.map((item) => <Item key={item.id} data={item}/>)}</ul>
+    </div>
+  )
+}
 
-Template.hello.onCreated(function helloOnCreated() {
-  // counter starts at 0
-  this.counter = new ReactiveVar(0);
-});
+class Results extends React.Component {
+  constructor () {
+    super()
+    
+    this.state = {
+      results: []
+    }
+  }
+  
+  componentDidMount () {
+    fetch('https://api.spotify.com/v1/search?type=artist,album,track,playlist&q=' + encodeURIComponent(this.props.query))
+      .then((response) => response.json())
+      .then((results) => { this.setState({ results }) })
+  }
 
-Template.hello.helpers({
-  counter() {
-    return Template.instance().counter.get();
-  },
-});
+  render () {
+    var resultKeys = Object.keys(this.state.results)
+    
+    return <div>
+      {resultKeys.map((type) => <ItemList key={type} type={type} items={this.state.results[type].items}/>)}
+    </div>
+  }
+}
 
-Template.hello.events({
-  'click button'(event, instance) {
-    // increment the counter when button is clicked
-    instance.counter.set(instance.counter.get() + 1);
-  },
+Meteor.startup(() => {
+  render(<Results query="Swans"/>, document.getElementById('results'));
 });
