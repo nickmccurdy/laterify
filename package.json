@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "scripts": {
+    "test": "standard"
+  },
+  "devDependencies": {
+    "standard": "^7.1.2"
+  },
+  "standard": {
+    "globals": [
+      "fetch",
+      "React",
+      "ReactDOM"
+    ]
+  }
+}
