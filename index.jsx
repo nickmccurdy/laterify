@@ -17,7 +17,17 @@ function ItemList (props) {
   )
 }
 
-class Results extends React.Component {
+function Results (props) {
+  var resultKeys = Object.keys(props.results)
+
+  return (
+    <div>
+      {resultKeys.map((type) => <ItemList key={type} type={type} items={props.results[type].items} />)}
+    </div>
+  )
+}
+
+class App extends React.Component {
   constructor () {
     super()
 
@@ -33,14 +43,8 @@ class Results extends React.Component {
   }
 
   render () {
-    var resultKeys = Object.keys(this.state.results)
-
-    return (
-      <div>
-        {resultKeys.map((type) => <ItemList key={type} type={type} items={this.state.results[type].items} />)}
-      </div>
-    )
+    return <Results results={this.state.results} />
   }
 }
 
-ReactDOM.render(<Results query='Swans' />, document.getElementById('root'))
+ReactDOM.render(<App query='Swans' />, document.getElementById('root'))
