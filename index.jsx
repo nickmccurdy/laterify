@@ -43,4 +43,4 @@ class Results extends React.Component {
   }
 }
 
-ReactDOM.render(<Results query='Swans' />, document.getElementById('results'))
+ReactDOM.render(<Results query='Swans' />, document.getElementById('root'))
