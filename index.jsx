@@ -27,24 +27,33 @@ function Results (props) {
   )
 }
 
-class App extends React.Component {
-  constructor () {
-    super()
+function mapStateToProps (state) {
+  return { results: state }
+}
 
-    this.state = {
-      results: []
-    }
-  }
+var ConnectedResults = ReactRedux.connect(mapStateToProps)(Results)
 
-  componentDidMount () {
-    fetch('https://api.spotify.com/v1/search?type=artist,album,track,playlist&q=' + encodeURIComponent(this.props.query))
+function results (state = [], action) {
+  return action.type === 'RECEIVE_RESULTS' ? action.results : state;
+}
+
+function fetchResults (query) {
+  return (dispatch) => {
+    return fetch('https://api.spotify.com/v1/search?type=artist,album,track,playlist&q=' + encodeURIComponent(query))
       .then((response) => response.json())
-      .then((results) => { this.setState({ results }) })
-  }
-
-  render () {
-    return <Results results={this.state.results} />
+      .then((results) => dispatch({ type: 'RECEIVE_RESULTS', results }))
   }
 }
 
-ReactDOM.render(<App query='Swans' />, document.getElementById('root'))
+var store = Redux.createStore(
+  results,
+  Redux.applyMiddleware(ReduxThunk.default)
+)
+store.dispatch(fetchResults('Swans'))
+
+ReactDOM.render(
+  <ReactRedux.Provider store={store}>
+    <ConnectedResults />
+  </ReactRedux.Provider>,
+  document.getElementById('root')
+)
