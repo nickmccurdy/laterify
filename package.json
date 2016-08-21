@@ -10,7 +10,10 @@
     "globals": [
       "fetch",
       "React",
-      "ReactDOM"
+      "ReactDOM",
+      "ReactRedux",
+      "Redux",
+      "ReduxThunk"
     ]
   }
 }

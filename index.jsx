@@ -34,7 +34,7 @@ function mapStateToProps (state) {
 var ConnectedResults = ReactRedux.connect(mapStateToProps)(Results)
 
 function results (state = [], action) {
-  return action.type === 'RECEIVE_RESULTS' ? action.results : state;
+  return action.type === 'RECEIVE_RESULTS' ? action.results : state
 }
 
 function fetchResults (query) {
